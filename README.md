@@ -2,7 +2,7 @@
 
 Realtime collaborative P2P database library
 
-- Realtime: changes are propogated with low latency
+- Realtime: changes are propagated with low latency
 - Collaborative: designed for multiple agents to change the same data structure simultaneously, without overwriting each other's changes
 - P2P: no centralied servers are needed, the application can effectively host itself
 - Database: can query it's own data, and save it atomically with consistentcy and durability guarantees
