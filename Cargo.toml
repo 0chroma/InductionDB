@@ -1,0 +1,14 @@
+[package]
+name = "inductiondb"
+version = "0.0.1"
+description = "Realtime collaborative p2p database library"
+license = "MIT"
+authors = ["0chroma <me@chroma.sh>"]
+edition = "2021"
+homepage = "https://github.com/0chroma/InductionDB"
+repository = "https://github.com/0chroma/InductionDB"
+readme = "./README.md"
+
+[dependencies]
+libp2p = "0.49.0"
+yrs = "0.12.0"
