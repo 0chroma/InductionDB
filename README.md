@@ -20,8 +20,7 @@ Realtime collaborative P2P database library
 - Isn't meant to be used as a part of a web application server like with the [Braid](https://braid.org/) family of projects.
 - Native code with safety guarantees thanks to Rust
   - Highly performant and perfect for resource limited devices
-- Options for data locality, ie you can specify a list of trusted peers for data to be served from in order to guarantee deletes
 - Batteries included: 
   - user auth + adding multiple devices to one identity
   - peer discovery, relay servers for nat traversal
-  - data access control
+  - trusted peers, data access control/locality management
