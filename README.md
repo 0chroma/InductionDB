@@ -14,7 +14,7 @@ The following links should give you some basic knowledge about the underlying te
 
 - [dotJS 2019 - James Long - CRDTs for Mortals](https://www.youtube.com/watch?v=DEcwa68f-jY&t=0s)
   - [CRDTs: The Hard Parts](https://www.youtube.com/watch?v=x7drE24geUw) for further reading
-- [Braid's Demo](https://braid.org/demo/interact)
+  - [Braid's Demo](https://braid.org/demo/interact) for an interactive demo
 - [libp2p DHT](https://curriculum.pl-launchpad.io/curriculum/libp2p/dht/)
 - [libp2p Publish/Subscribe](https://docs.libp2p.io/concepts/pubsub/overview/)
   - [Demystifying libp2p Gossipsub](https://www.youtube.com/watch?v=BUc4xta7Mfk) (if you prefer video form)
