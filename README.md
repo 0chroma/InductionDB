@@ -32,7 +32,16 @@ The following links should give you some basic knowledge about the underlying te
 - Native code with safety guarantees thanks to Rust
   - Highly performant and perfect for resource limited devices
 - Batteries included unlike [Yjs](https://yjs.dev/) and [Automerge](https://automerge.org/): 
-  - user auth + adding multiple devices to one identity
-  - peer discovery, relay servers for nat traversal/privacy
-  - trusted peers, data access control/locality management
-
+  - user auth, multiple clients can be registered to one identity
+  - user groups aka "trusted peers"
+    - list can only be modified if consensus is reached by existing users (critical mass of users cryptographically signs new list)
+    - can be used to enforce access control and data locality with confidence
+      - data can be configured to only sync to trusted peers, ensuring deletes are respected
+      - data can also be configured to be public, but only allow modification by trusted peers, with or without consensus based group approval
+    - more robust than "if you have the private key, you can read it" style access control; multiple keys need to be broken to add a new user, and a compromised user can be removed
+  - data validators to ensure writes from other clients are rejected if they don't follow an application's internal logic
+  - peer discovery, relay servers for nat traversal/pseudo-privacy
+  - table-based events: can listen on queries, matching records will be fetched from other peers dynamically
+    - queries predicted to be slow (ie on rows without an index) will be rejected to prevent DOS attacks
+    - large query results will be paginated in order to ensure backpressure and prevent DOS attacks
+  - some kind of slow-mode / read only mode when there are too many clients (TBD)
