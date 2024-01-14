@@ -2,13 +2,17 @@ use uuid::Uuid;
 use yrs::Doc;
 
 pub struct Document {
-  id: Uuid,
-  permissions: ,
-  yrs_doc: Doc,
+    id: Uuid,
+    yrs_doc: Doc,
 }
 
-pub impl Document {
-  pub fn serialize(&self) -> () {}
-  pub fn deserialize(&self) -> () {}
-
+impl Document {
+    pub fn new() -> () {
+        Document {
+            id: Uuid::new_v4(),
+            yrs_doc: Doc::new(),
+        };
+    }
+    pub fn serialize(&self) -> () {}
+    pub fn deserialize(&self) -> () {}
 }
