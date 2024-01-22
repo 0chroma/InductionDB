@@ -11,6 +11,7 @@ readme = "./README.md"
 
 [dependencies]
 libp2p = "0.53.0"
+serde = { version = "1.0.195", features = ["derive"] }
 yrs = "0.17.0"
 
 [dependencies.uuid]
@@ -19,4 +20,5 @@ features = [
     "v4",
     "v7",
     "js",
+    "serde",
 ]

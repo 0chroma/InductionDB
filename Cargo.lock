@@ -418,6 +418,7 @@ name = "inductiondb"
 version = "0.0.1"
 dependencies = [
  "libp2p",
+ "serde",
  "uuid",
  "yrs",
 ]
@@ -1129,6 +1130,7 @@ checksum = "5e395fcf16a7a3d8127ec99782007af141946b4795001f876d54fb0d55978560"
 dependencies = [
  "atomic",
  "getrandom 0.2.12",
+ "serde",
  "wasm-bindgen",
 ]
 

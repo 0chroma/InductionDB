@@ -1,21 +1,27 @@
 use uuid::Uuid;
-use yrs::Doc;
+use serde::{Serialize, Deserialize};
+use crate::CRDT;
 
-pub struct Document {
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Document<T> where T: CRDT {
     id: Uuid,
-    crdt: Doc,
+    crdt: T,
 }
 
-impl Document {
-    pub fn new() -> Document {
+impl<T> Document<T> {
+    pub fn new() -> Document<T> {
         Document {
             id: Uuid::new_v4(),
-            crdt: Doc::new(), //todo make this into a trait so we can swap between crdts
+            crdt: T::new(),
         }
     }
-    pub fn sync(&self, doc: &Document) -> &Document {
+    pub fn sync(&self, doc: &Document<T>) -> &Document<T> {
         self
     }
-    pub fn serialize(&self) -> () {}
-    pub fn deserialize(&self) -> () {}
+    pub fn serialize(&self) -> () {
+
+    }
+    pub fn deserialize(&self) -> () {
+        
+    }
 }
