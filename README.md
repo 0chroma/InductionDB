@@ -2,9 +2,11 @@
 
 Realtime collaborative P2P database library
 
+The goal is to make it easy to build peer to peer apps, such as social networks or collaborative applications, that don't depend on any central servers.
+
 - Realtime: changes are propagated with low latency
 - Collaborative: designed for multiple agents to change the same data structure simultaneously, without overwriting each other's changes
-- P2P: no centralized or federated servers are needed, the application can effectively host itself
+- P2P: no centralized or federated servers are needed, the application can effectively host itself, and has mechanisms in place to prevent attacks from malicious peers
 - Database: can query it's own data, and save it atomically with consistency and durability guarantees
 - Library: can be embedded into a larger app, and used as it's data layer
 
