@@ -1,14 +1,76 @@
 # InductionDB
 
-Realtime collaborative P2P database library
+InductionDB is an easy to use database library that helps you write collaborative, decentralized applications.
+It abstracts away the complexities that come with data syncing and p2p, so you can focus on building your app
+instead of managing it's data.
 
-The goal is to make it easy to build peer to peer apps, such as social networks or collaborative applications, that don't depend on any central servers.
+Since it's written in Rust, it can be used anywhere, but is primarily meant for applications that can run
+persistently. In theory it can be used with web and embedded applications, and could work over transports
+like WebRTC, Bluetooth, or LoRa.
 
-- Realtime: changes are propagated with low latency
-- Collaborative: designed for multiple agents to change the same data structure simultaneously, without overwriting each other's changes
-- P2P: no centralized or federated servers are needed, the application can effectively host itself, and has mechanisms in place to prevent attacks from malicious peers
-- Database: can query it's own data, and save it atomically with consistency and durability guarantees
-- Library: can be embedded into a larger app, and used as it's data layer
+The word "induction" in InductionDB describes both how each replica influences each other (like in
+electrical induction), as well as how its CRDTs store changes to data (as in proof-by-induction).
+
+## Structure
+
+### Manifolds
+
+Since there are many different types of CRDTs, ranging from simple numerical counters to fully queriable
+embedded databases, InductionDB doesn't have a concept of "documents" like you may be familiar with from
+other databases. Instead, the base unit of data in InductionDB are called manifolds. A manifold has a
+key that you can use to access it's data just like you would in a key-value store, the difference being
+that multiple instances of that manifold can exist across different peers.
+
+The first time a manifold is requested, InductionDB will create it's own instance of the manifold and replicate
+it's data from other peers. Once initialized, you can mutate the manifold instance using it's underlying CRDT's
+APIs. InductionDB will automatically handle syncing changes to it's instance of the manifold to other peers.
+You can also subscribe to updates when you receive changes to the manifold from other peers.
+
+### Validators
+
+Since peers in a p2p system can't always be trusted, validators are used to ensure that a change to data is
+valid. For example, if you were writing a game, you could translate the rules of your game into validators
+for any changes coming from a remote peer. You could also use validators to enforce data schemas when using
+unstructured document-based CRDTs, or validate that a given peer is allowed to change specific data.
+
+You can also use validators to reject changes from older versions of the application. This ensures that all
+changes will be on the latest schema, and data won't be corrupted from version mismatches.
+
+In the future, validators could be used to implement a "slow-mode" for when there are too many clients
+changing a manifold at once. This can narrow the scope of peers that are allowed to propogate changes.
+
+### Decentralized migrations
+
+When you need to change your data's schema, you can use InductionDB's migration system to ensure that
+migrations are only applied once across the whole network, and validated to be correct by other peers.
+
+### Replication Control
+
+In a centralized application, you might want to restrict who can view specific data with access control.
+In InductionDB, we do this by restricting which peers are allowed to replicate a given manifold through
+replication control.
+
+Your application will need to define how the list of allowed peers is decided using validators. This should
+be flexible enough to allow many different types of decision making, such as consensus-based voting using
+cryptographic signing, or having a trusted "admin" peer that dictates the list to other peers.
+
+Some sort of consensus-based list is recommended, since it's more robust than "if you have the private key,
+you can read it" style access control; multiple keys need to be broken to add a new user, and a compromised
+user can be easily removed.
+
+Trust is particularly important in p2p applications, since a request to delete data requires good faith on
+the part of the peers that have replicated it. It's important to be mindful of this when deciding on how
+replication should be controlled.
+
+### Users
+
+A user might have many different devices that they use the same application from. InductionDB provides tools
+for a user to group multiple peer IDs together for use in validators or replication control.
+
+### Peer Discovery and Relays
+
+Peer discovery is done through a set of trusted DNS servers and through gossip across the network. Relay
+servers can also be set up for nat traversal/pseudo-privacy.
 
 ## How does this work? I want to learn more!
 
@@ -21,27 +83,11 @@ The following links should give you some basic knowledge about the underlying te
 - [libp2p Publish/Subscribe](https://docs.libp2p.io/concepts/pubsub/overview/)
   - [Demystifying libp2p Gossipsub](https://www.youtube.com/watch?v=BUc4xta7Mfk) (if you prefer video form)
 
-## Differences
+## Differences from other projects
 
 - Does not rely on blockchain tech like [Ceramic](https://ceramic.network/)
 - Bindings can be written in multiple languages and is wasm compatible, isn't a js-only project like [Gun](https://gun.eco/) or [OrbitDB](https://github.com/orbitdb/orbit-db)
 - Isn't meant to be used as a part of a web application server like with the [Braid](https://braid.org/) family of projects.
 - Native code with safety guarantees thanks to Rust
   - Highly performant and perfect for resource limited devices
-- Batteries included unlike [Yjs](https://yjs.dev/) and [Automerge](https://automerge.org/): 
-
-## Planned Features
-
-- user auth, multiple clients can be registered to one identity
-- user groups aka "trusted peers"
-  - list can only be modified if consensus is reached by existing users (critical mass of users cryptographically signs new list)
-  - can be used to enforce access control and data locality with confidence
-    - data can be configured to only sync to trusted peers, ensuring deletes are respected
-    - data can also be configured to be public, but only allow modification by trusted peers, with or without consensus based group approval
-  - more robust than "if you have the private key, you can read it" style access control; multiple keys need to be broken to add a new user, and a compromised user can be removed
-- data validators to ensure writes from other clients are rejected if they don't follow an application's internal logic
-- peer discovery, relay servers for nat traversal/pseudo-privacy
-- table-based events: can listen on queries, matching records will be fetched from other peers dynamically
-  - queries predicted to be slow (ie on rows without an index) will be rejected to prevent DOS attacks
-  - large query results will be paginated in order to ensure backpressure and prevent DOS attacks
-- some kind of slow-mode / read only mode when there are too many clients (TBD)
+- Batteries included unlike [Yjs](https://yjs.dev/), [Automerge](https://automerge.org/), and [cr-sqlite](https://github.com/vlcn-io/cr-sqlite)
