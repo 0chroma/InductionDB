@@ -37,12 +37,13 @@ You can also use validators to reject changes from older versions of the applica
 changes will be on the latest schema, and data won't be corrupted from version mismatches.
 
 In the future, validators could be used to implement a "slow-mode" for when there are too many clients
-changing a manifold at once. This can narrow the scope of peers that are allowed to propogate changes.
+changing a manifold at once. You could have a validator that drops changes from peers that send them
+too quickly, or drop changes that aren't from a specific subset of peers.
 
 ### Decentralized migrations
 
 When you need to change your data's schema, you can use InductionDB's migration system to ensure that
-migrations are only applied once across the whole network, and validated to be correct by other peers.
+migrations can be applied across the entire network safely and without causing network congestion.
 
 ### Replication Control
 
@@ -50,13 +51,10 @@ In a centralized application, you might want to restrict who can view specific d
 In InductionDB, we do this by restricting which peers are allowed to replicate a given manifold through
 replication control.
 
-Your application will need to define how the list of allowed peers is decided using validators. This should
-be flexible enough to allow many different types of decision making, such as consensus-based voting using
-cryptographic signing, or having a trusted "admin" peer that dictates the list to other peers.
-
-Some sort of consensus-based list is recommended, since it's more robust than "if you have the private key,
-you can read it" style access control; multiple keys need to be broken to add a new user, and a compromised
-user can be easily removed.
+Your application will need to specify how these peers are decided using something similar to the validator
+API. The recommended way is through consensus-based cryptographic signing of a new membership from
+a majority of other peers. There will be a few pre-implemented options you can use without having to write
+your own.
 
 Trust is particularly important in p2p applications, since a request to delete data requires good faith on
 the part of the peers that have replicated it. It's important to be mindful of this when deciding on how
@@ -69,8 +67,8 @@ for a user to group multiple peer IDs together for use in validators or replicat
 
 ### Peer Discovery and Relays
 
-Peer discovery is done through a set of trusted DNS servers and through gossip across the network. Relay
-servers can also be set up for nat traversal/pseudo-privacy.
+Peer discovery is done through a set of trusted servers and through gossip across the network. Relay
+servers can also be set up for NAT traversal/pseudo-privacy.
 
 ## How does this work? I want to learn more!
 
