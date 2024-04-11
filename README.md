@@ -41,11 +41,13 @@ consistency in this regard. If a peer keeps sending invalid changes, they will b
 of the swarm and be forced to revert their changes in order to catch up with a manifold's "global" state.
 
 This posturing does lead to a potential vulnerability to Sybil attacks. In the short-term this can be
-mitigated via limiting writes to a trusted set of peers. InductionDB will cryptographicaly sign any changes
-peers make, so you can ensure that a change wasn't faked by a peer. Later in development, we'll be watching what
+mitigated by being selective of new peers you allow changes from, ie by having a vetting process to verify
+new memberships have a real, trustable person behind them. As long as the majority of users in this group
+remain uncompromised, these attacks will not affect your application. InductionDB will cryptographicaly
+sign all changes peers make, so a majority of uncompromised peers can ensure that mailicious peers can't
+poison the well. Long-term, we'll be watching what
 [libp2p's solution](https://docs.libp2p.io/concepts/security/security-considerations/#sybil-attacks)
-is, and implementing that so manifolds can be publicly writable in a safe way. Until then, we do not
-recommend allowing untrusted peers to make changes to manifolds.
+is and implementing that, so manifolds can be both publicly writable and resillient against these attacks.
 
 In the future, validators could be used to implement a "slow-mode" for when there are too many clients
 changing a manifold at once. You could have a validator that drops changes from peers that send them
