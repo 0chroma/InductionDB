@@ -36,6 +36,17 @@ unstructured document-based CRDTs, or validate that a given peer is allowed to c
 You can also use validators to reject changes from older versions of the application. This ensures that all
 changes will be on the latest schema, and data won't be corrupted from version mismatches.
 
+Validators run on every peer. InductionDB takes a "trust, but verify" attitude towards ensuring data
+consistency in this regard. If a peer keeps sending invalid changes, they will be out-of-sync with the rest
+of the swarm and be forced to revert their changes in order to catch up with a manifold's "global" state.
+
+This posturing does lead to a potential vulnerability to Sybil attacks. In the short-term this can be
+mitigated via limiting writes to a trusted set of peers. InductionDB will cryptographicaly sign any changes
+peers make, so you can ensure that a change wasn't faked by a peer. Later in development, we'll be watching what
+[libp2p's solution](https://docs.libp2p.io/concepts/security/security-considerations/#sybil-attacks)
+is, and implementing that so manifolds can be publicly writable in a safe way. Until then, we do not
+recommend allowing untrusted peers to make changes to manifolds.
+
 In the future, validators could be used to implement a "slow-mode" for when there are too many clients
 changing a manifold at once. You could have a validator that drops changes from peers that send them
 too quickly, or drop changes that aren't from a specific subset of peers.
