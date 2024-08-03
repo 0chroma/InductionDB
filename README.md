@@ -97,8 +97,9 @@ The following links should give you some basic knowledge about the underlying te
 ## Differences from other projects
 
 - Does not rely on blockchain tech like [Ceramic](https://ceramic.network/)
-- Bindings can be written in multiple languages and is wasm compatible, isn't a js-only project like [Gun](https://gun.eco/) or [OrbitDB](https://github.com/orbitdb/orbit-db)
+- Bindings can be written in multiple languages and is wasm compatible, isn't a js-only project, and isn't tied to a single CRDT like [Gun](https://gun.eco/) or [OrbitDB](https://github.com/orbitdb/orbit-db)
 - Isn't meant to be used as a part of a web application server like with the [Braid](https://braid.org/) family of projects.
 - Native code with safety guarantees thanks to Rust
   - Highly performant and perfect for resource limited devices
+- allows for dynamic groups unlike [wesh](https://berty.tech/docs/protocol)
 - Batteries included unlike [Yjs](https://yjs.dev/), [Automerge](https://automerge.org/), and [cr-sqlite](https://github.com/vlcn-io/cr-sqlite)
